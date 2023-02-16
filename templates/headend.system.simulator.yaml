@@ -42,9 +42,6 @@ Parameters:
     Default: 'readings'
     MinLength: 3
     MaxLength: 256
-  SourceObjects:
-    Type: String
-    Default: 'assets/lambda/cryptography_py3_9_layer/lambda.zip, assets/lambda/awswrangler_py3_9_layer/lambda.zip, assets/lambda/s3_copy_function/lambda.zip, assets/lambda/create_secret_function/lambda.zip, assets/lambda/readings_get_function/lambda.zip, assets/lambda/readings_file_get_function/lambda.zip, assets/lambda/readings_file_post_function/lambda.zip, assets/lambda/readings_file_worker_function/lambda.zip, assets/glue/jars/amazon-timestream-jdbc-1.0.2.jar, assets/glue/scripts/timestream_to_s3.py'
   QSS3BucketName:
     Description:
       'Keep the default bucket unless you are customizing the template or assets in a new location.
@@ -181,7 +178,19 @@ Resources:
       ServiceToken: !GetAtt S3CopyLambdaFunction.Arn
       SourceBucket: !Ref QSS3BucketName
       SourcePrefix: !Ref QSS3KeyPrefix
-      Objects: !Ref SourceObjects
+      Objects: !Join
+        - ', '
+        -
+          - 'assets/lambda/cryptography_py3_9_layer/lambda.zip'
+          - 'assets/lambda/awswrangler_py3_9_layer/lambda.zip'
+          - 'assets/lambda/s3_copy_function/lambda.zip'
+          - 'assets/lambda/create_secret_function/lambda.zip'
+          - 'assets/lambda/readings_get_function/lambda.zip'
+          - 'assets/lambda/readings_file_get_function/lambda.zip'
+          - 'assets/lambda/readings_file_post_function/lambda.zip'
+          - 'assets/lambda/readings_file_worker_function/lambda.zip'
+          - 'assets/glue/jars/amazon-timestream-jdbc-1.0.2.jar'
+          - 'assets/glue/scripts/timestream_to_s3.py'
       DestBucket: !Ref HssSimulatorBucket
   S3CopyLambdaFunction:
     Type: AWS::Lambda::Function

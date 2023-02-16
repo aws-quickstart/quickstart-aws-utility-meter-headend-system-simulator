@@ -5,17 +5,19 @@ project:
   owner: michlitz@amazon.com
   shorten_stack_name: true
   regions:
-  - us-east-1
-  - us-east-2
-  - us-west-2
+    - us-east-1
+    - us-east-2
+    - us-west-2
   lambda_source_path: source/lambda
   lambda_zip_path: assets/lambda
+  build_submodules: true
   parameters:
+    DeviceDataGeneratorInclude: 'No'
     TimestreamCreation: 'Create New'
     TimestreamDatabaseName: 'devices'
     TimestreamTableName: 'readings'
     QSS3BucketName: $[taskcat_autobucket]
-    QSS3KeyPrefix: quickstart-aws-utility-meter-headend-system-simulator/
+    QSS3BucketRegion: $[taskcat_current_region]
 tests:
   default:
-    template: templates/headend.system.simulator.yaml
+    template: templates/headend.system.simulator.main.yaml
