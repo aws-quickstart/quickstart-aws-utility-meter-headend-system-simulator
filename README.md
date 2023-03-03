@@ -1,9 +1,8 @@
-# Getting Started
-**[IMPORTANT]: Write access is not provided to this repo. Please be sure to work in your fork**
+## Headend System Simulator on AWS Cloud—Quick Start
 
-- Resolve Open Issues
+For architectural details, step-by-step instructions, and customization options, see the [deployment guide](https://aws-quickstart.github.io/
+quickstart-aws-utility-meter-headend-system-simulator/).
 
-<img width="1538" alt="Screen Shot 2022-09-29 at 12 04 45 PM" src="https://user-images.githubusercontent.com/5912128/193120328-02a6cc19-02ca-4e1f-b504-3dfc8fc301ab.png">
+To post feedback, submit feature ideas, or report bugs, use the **Issues** section of this GitHub repo.
 
-
-See [contribution guide](CONTRIBUTING.md) for more info
+To submit code for this Quick Start, see the [AWS Quick Start Contributor's Kit](https://aws-quickstart.github.io/).
