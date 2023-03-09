@@ -1,4 +1,4 @@
 [submodule "submodules/quickstart-aws-utility-meter-data-generator"]
 	path = submodules/quickstart-aws-utility-meter-data-generator
-	url = git@github.com:michlitz/quickstart-aws-utility-meter-data-generator.git
+	url = git@github.com:aws-quickstart/quickstart-aws-utility-meter-data-generator.git
 	branch = main
