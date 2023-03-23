@@ -4,7 +4,7 @@
 
 === Output values
 
-After you launch {partner-product-short-name}, refer to the following output values located on the Outputs tab of the stack as shown in <<outputs1>> below.
+After you launch {partner-product-short-name}, refer to the following output values located on the *Outputs* tab of the stack, as shown in <<outputs1>> below.
 
 [#outputs1]
 .Outputs for {partner-product-short-name} on AWS
