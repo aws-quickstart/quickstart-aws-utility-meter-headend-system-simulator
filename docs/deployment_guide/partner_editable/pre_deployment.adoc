@@ -2,4 +2,4 @@
 
 == Predeployment steps
 
-Please be sure to install the latest version of https://www.docker.com/[Docker Desktop^], as it is used to build the AWS Lambda functions in this Quick Start.
+This Partner Solution uses Docker to build the AWS Lambda functions. Install the latest version of https://www.docker.com/[Docker Desktop^].

@@ -4,19 +4,23 @@
 
 === Output values
 
-After you launch {partner-product-short-name}, refer to the following output values located on the Outputs tab of the stack as shown in <<outputs1>> below.
+After you launch {partner-product-short-name}, refer to the following output values located on the *Outputs* tab of the stack, as shown in <<outputs1>> below.
 
 [#outputs1]
 .Outputs for {partner-product-short-name} on AWS
 image::../docs/deployment_guide/images/outputs.png[Outputs]
-:apiGatewayInvokeURL: \https://<id>.execute-api.<region>.amazonaws.com/prod
-:SecretARN: arn:aws:secretsmanager:<region>:<account>:secret:<stackname>/sftp/private_key-<id>
-:SecretName: <stackname>/sftp/private_key
-:SftpServerAddress: <id>.server.transfer.<region>.amazonaws.com
-:SftpUserName: sftp-user
+//TODO Tony, I reformatted the list below because it wasn't displaying at all. Is this the format you intended?
+* *apiGatewayInvokeURL*: \https://<id>.execute-api.<region>.amazonaws.com/prod
+* *SecretARN*: arn:aws:secretsmanager:<region>:<account>:secret:<stackname>/sftp/private_key-<id>
+* *SecretName*: <stackname>/sftp/private_key
+* *SftpServerAddress*: <id>.server.transfer.<region>.amazonaws.com
+* *SftpUserName*: sftp-user
 
 === Verifying meter data generation
-If the optional Device Data Generator was also launched, records will start being inserted into Amazon Timestream at the interval you defined at stack creation. To check this, navigate to Amazon Timestream in the AWS console and go to the Query editor in the left navigation bar and run the below query. If the `devices` database and `readings` table values were changed during launch of {partner-product-short-name}, please substitute your custom values.
+If you launched the optional Device Data Generator, records will be added to Amazon Timestream at the interval you defined at stack creation. To check this:
+. Sign in to the AWS Management Console and open the https://us-east-1.console.aws.amazon.com/timestream/home?region=us-east-1#databases[Amazon Timestream console^]. 
+. From the left navigation pane, choose *Query editor*.
+. Run the below query. If the `devices` database and `readings` table values were changed during launch of {partner-product-short-name}, substitute your custom values.
 
 .Amazon Timestream query to get min and max dates for records
 [source,sql]
@@ -27,34 +31,37 @@ select
 from devices.readings
 ----
 
-The results of the query should look similar to <<outputs2>> below.
+The results of the query should look similar to <<outputs2>>, below.
 [#outputs2]
 .Min/max SQL query results for {partner-product-short-name} on AWS
 image::../docs/deployment_guide/images/sql_query_results.png[Outputs]
 
 === Interacting with REST API endpoints
-When interacting with the {partner-product-short-name} REST API, use the output value from `apiGatewayInvokeURL` as shown in <<outputs1>> as the base URL. +
+When interacting with the {partner-product-short-name} REST API, use the output value from `apiGatewayInvokeURL` as the base URL, as shown in <<outputs1>> . +
 Example: `{apiGatewayInvokeURL}`
 
 ==== Paginated smart meter readings
-:readings_endpoint: readings
-:start_date: 2023-02-27 16:00:00.000000
-:end_date: 2023-02-27 16:40:00.000000
-:page_size: 100
+//TODO Tony, I reformatted the list below because it wasn't displaying at all. Is this the format you intended?
+* *readings_endpoint*: readings
+* *start_date*: 2023-02-27 16:00:00.000000
+* *end_date*: 2023-02-27 16:40:00.000000
+* *page_size*: 100
 
 To fetch paginated readings from the REST API, `/readings` must be appended to the `apiGatewayInvokeURL`. In addition, the following parameters are required:
 
-.readings GET parameters
-* `start_date` - Required date representing the start time from which to  return smart meter readings.
+.Readings GET parameters
+* `start_date` - Required date representing the start time from which to return smart meter readings.
 * `page_size` - Optional number of records to return in each response. Default is 10.
 * `offset` - Optional value used to return subsequent records after initial results.
 
-The initial readings GET call to the {partner-product-short-name} REST API should look like the following example: +
-`{apiGatewayInvokeURL}/{readings_endpoint}?start_date={start_date}&page_size={page_size}`
+The initial readings GET calls to the {partner-product-short-name} REST API should look like the following example: +
+----
+{apiGatewayInvokeURL}/{readings_endpoint}?start_date={start_date}&page_size={page_size}
+----
 
-An example response is displayed below with the first and last record in the response.
+See an example response below with the first and last record in the response.
 
-.example response of initial readings GET call
+.Example response of initial readings GET calls
 [source,json]
 ----
 {
@@ -99,12 +106,14 @@ An example response is displayed below with the first and last record in the res
 }
 ----
 
-For subsequent calls for additional pages, you can supply the last offset value in the request as shown below. +
-`{apiGatewayInvokeURL}/{readings_endpoint}?start_date={start_date}&page_size={page_size}&offset=100`
+For subsequent calls for additional pages, supply the last offset value in the request, as shown below. +
+----
+{apiGatewayInvokeURL}/{readings_endpoint}?start_date={start_date}&page_size={page_size}&offset=100
+----
 
-An example response is shown below. You can continue repeating the pattern of passing in the last_ofsset value for subsequent pages of results. Once the records_total is less than the request offset value, or the number of records is 0, there are no more results to process.
+See an example response below. Continue repeating the pattern of passing in the `last_ofsset` value for subsequent pages of results. When the `records_total` is less than the request offset value, or the number of records is 0, there are no more results to process.
 
-.example response of subsequent readings GET call
+.Example response of subsequent readings GET call
 [source,json]
 ----
 {
@@ -150,14 +159,17 @@ An example response is shown below. You can continue repeating the pattern of pa
 ----
 
 ==== Bulk meter readings files
-:readingsfile_endpoint: readings/file
+//TODO Tony, I reformatted the item below because it wasn't displaying at all. Is this the format you intended?
+* *readingsfile_endpoint*: readings/file
 
-To request a bulk readings file, a POST request can be made by appending `/readings/file` to the `apiGatewayInvokeURL` URL as shown below. +
-`{apiGatewayInvokeURL}/{readingsfile_endpoint}`
+To request a bulk readings file, make a POST request by appending `/readings/file` to the `apiGatewayInvokeURL` URL, as shown below. +
+----
+{apiGatewayInvokeURL}/{readingsfile_endpoint}
+----
 
-The body of the post should include `start_date` and `end_date` as shown below:
+The body of the post should include `start_date` and `end_date`, as shown below:
 
-.readings/file POST body
+.Readings/file POST body
 [source,json]
 ----
 {
@@ -166,9 +178,9 @@ The body of the post should include `start_date` and `end_date` as shown below:
 }
 ----
 
-The REST API will return a `request_id` and `status` for the request. The lifecycle of a file request is "queued" > "submitted" > "running" > "completed" or "failed".
+The REST API returns a `request_id` and `status` for the request. The lifecycle statuses of a file request are "queued" > "submitted" > "running" > "completed" or "failed".
 
-.example response from POST
+.Example response from POST
 [source,json]
 ----
 {
@@ -177,12 +189,14 @@ The REST API will return a `request_id` and `status` for the request. The lifecy
 }
 ----
 
-Using the `request_id` from the previous call, you can send a GET request to the `/readings/file` endpoint with a `request_id` parameter as shown below.
-`{apiGatewayInvokeURL}/{readingsfile_endpoint}?request_id=55e3059d-6274-4d97-89a8-40ca93bcd084`
+Using the `request_id` from the previous call, send a GET request to the `/readings/file` endpoint with a `request_id` parameter, as shown below.
+----
+{apiGatewayInvokeURL}/{readingsfile_endpoint}?request_id=55e3059d-6274-4d97-89a8-40ca93bcd084
+----
 
-The response will return the current status, as well as a `record_count` to signify the number of records that will be contained in the file. Once the file request is complete, the status will be `completed` and the `sftp_location` will be present as displayed in the example below.
+The response returns the current status, as well as a `record_count` to signify the number of records that are contained in the file. When the file request is complete, the status is `completed` and the `sftp_location` is present, as shown in the example below.
 
-.example response from GET to readings/file resource
+.Example response from GET to readings/file resource
 [source,json]
 ----
 {
@@ -194,10 +208,10 @@ The response will return the current status, as well as a `record_count` to sign
 ----
 
 === Downloading readings files
-Readings files can be downloaded from the SFTP file transfer service provided by AWS Transfer family by authenticating with the private certificate stored in AWS Secrets Manager. For demonstration purposes, we will use the AWS CLI to retrieve the secret to a local file and then use the certificate to download the file to our local machine.
+Download readings files from the SFTP file transfer service (provided by the AWS Transfer Family) by authenticating with the private certificate stored in AWS Secrets Manager. For demonstration purposes, we'll use the AWS Command Line Interface (AWS CLI) to retrieve the secret to a local file, and then use the certificate to download the file to our local machine.
 
 ==== Retrieving the secret to a file
-Substitute `<SecretValue>` for value displayed in <<outputs1>>.
+Substitute `<SecretValue>` for the value displayed in <<outputs1>>.
 
 .AWS CLI command to export secret value to a file
 [source,console]
@@ -212,7 +226,7 @@ $ chmod 400 private.pem
 ----
 
 ==== Authenticating with the secret
-Authenticate to the SFTP service using the `SftpUserName` and `SftpServerAddress` as displayed in <<outputs1>>, as well as with the certificate. Example command shown below:
+Authenticate to the SFTP service using the `SftpUserName` and `SftpServerAddress`, as shown in <<outputs1>>, as well as with the certificate. See the example command below:
 
 [source,console]
 ----
@@ -220,7 +234,7 @@ $ sftp -i private.pem <SftpUserName>@<SftpSereverAddress>
 ----
 
 ==== Downloading file
-Once authenticated, simply type `get` followed by the `sftp_location` as demonstrated below.
+When authenticated, type `get` followed by the `sftp_location`, as demonstrated below.
 
 [source,console]
 ----
