@@ -10,7 +10,6 @@ project:
     - us-west-2
   lambda_source_path: source/lambda
   lambda_zip_path: assets/lambda
-  build_submodules: true
   parameters:
     DeviceDataGeneratorInclude: 'Yes'
     TimestreamCreation: 'Create New'

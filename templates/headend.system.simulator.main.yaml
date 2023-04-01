@@ -215,8 +215,6 @@ Resources:
         TimestreamCreation: 'Use Existing'
         TimestreamDatabaseName: !Ref TimestreamDatabaseName
         TimestreamTableName: !Ref TimestreamTableName
-        QSS3BucketName: !Ref QSS3BucketName
-        QSS3KeyPrefix: !Sub '${QSS3KeyPrefix}submodules/quickstart-aws-utility-meter-data-generator/'
 Outputs:
   StackName:
     Description: 'Stack name'
