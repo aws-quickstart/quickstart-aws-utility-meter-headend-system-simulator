@@ -188,7 +188,7 @@ Resources:
           S3Bucket: !If [ UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName ]
       Parameters:
         TimestreamCreation: !If [ CreateTimeStream, 'Create New', 'Use Existing' ]
-        TimestreamDatabaseName: !Ref TimestreamDatabaseName
+        TimestreamDatabaseName: !Sub '${TimestreamDatabaseName}-${AWS::Region}'
         TimestreamTableName: !Ref TimestreamTableName
         QSS3BucketName: !Ref QSS3BucketName
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
@@ -213,7 +213,7 @@ Resources:
         LateArrivalPercent: !Ref LateArrivalPercent
         LateArrivalMinuteOffset: !Ref LateArrivalMinuteOffset
         TimestreamCreation: 'Use Existing'
-        TimestreamDatabaseName: !Ref TimestreamDatabaseName
+        TimestreamDatabaseName: !Sub '${TimestreamDatabaseName}-${AWS::Region}'
         TimestreamTableName: !Ref TimestreamTableName
 Outputs:
   StackName:

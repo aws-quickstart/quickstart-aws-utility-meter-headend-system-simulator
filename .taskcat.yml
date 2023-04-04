@@ -13,7 +13,6 @@ project:
   parameters:
     DeviceDataGeneratorInclude: 'Yes'
     TimestreamCreation: 'Create New'
-    TimestreamDatabaseName: 'devices'
     TimestreamTableName: 'readings'
     QSS3BucketName: $[taskcat_autobucket]
     QSS3BucketRegion: $[taskcat_current_region]
