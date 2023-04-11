@@ -24,7 +24,7 @@ def query(date_start, offset_start, offset_end):
 			select
 				row_number() over (order by time asc, device_id asc) offset,
 				time, arrival_time, device_id, measure_name, load, crrnt, pf, kva, kw, vltg
-			from {{database}}.{{table}}
+			from "{{database}}"."{{table}}"
 			where time >= '{{date_start}}'
 		)
 		where offset > {{offset_start}}

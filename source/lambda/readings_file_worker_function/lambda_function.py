@@ -62,7 +62,7 @@ def lambda_handler(event, context):
 				max(time) time_max,
 				count(distinct(time)) partition_count,
 				count(time) record_count
-			from {{timestream_database}}.{{timestream_table}}
+			from "{{timestream_database}}"."{{timestream_table}}"
 			where time >= '{{start_date}}'
 			and time <= '{{end_date}}'
 			'''
