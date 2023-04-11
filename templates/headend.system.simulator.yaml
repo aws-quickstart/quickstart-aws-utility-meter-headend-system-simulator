@@ -4,27 +4,27 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: 'Timestream Configuration'
+          default: 'Timestream configuration'
         Parameters:
           - TimestreamCreation
           - TimestreamDatabaseName
           - TimestreamTableName
       - Label:
-          default: 'Deployment Configuration'
+          default: 'Deployment configuration'
         Parameters:
           - QSS3BucketName
           - QSS3KeyPrefix
     ParameterLabels:
       TimestreamCreation:
-        default: 'Do you want to use an existing Timestream database and table or create new ones?'
+        default: 'Use existing Timestream database and table or create new ones'
       TimestreamDatabaseName:
-        default: 'Name of the new or existing Timestream database'
+        default: 'Name of new or existing Timestream database'
       TimestreamTableName:
-        default: 'Name of the new or existing Timestream table'
+        default: 'Name of new or existing Timestream table'
       QSS3BucketName:
-        default: 'What is the name of the bucket in which the Quick Start assets are hosted?'
+        default: 'Name of bucket where assets are hosted'
       QSS3KeyPrefix:
-        default: 'What is the prefix (directory) in which the Qkick Start assets are located?'
+        default: 'Prefix (directory) where assets are located'
 Parameters:
   TimestreamCreation:
     Default: 'Create New'
@@ -43,29 +43,27 @@ Parameters:
     MinLength: 3
     MaxLength: 256
   QSS3BucketName:
-    Description:
-      'Keep the default bucket unless you are customizing the template or assets in a new location.
-      Changing the name updates code references to point to a new Quick Start location.
-      This name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-).
-      See https://aws-quickstart.github.io/option1.html.'
-    Type: String
-    Default: 'aws-quickstart'
-    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
-    ConstraintDescription:
-      'The Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-).
-      It cannot start or end with a hyphen (-).'
+    AllowedPattern: ^[0-9a-z]+([0-9a-z-\.]*[0-9a-z])*$
+    ConstraintDescription: >-
+      The S3 bucket name can include numbers, lowercase letters, 
+      and hyphens (-), but it cannot start or end with a hyphen.
+    Default: aws-quickstart
+    Description: >-
+      Name of the S3 bucket for your copy of the deployment assets. Keep the default
+      name unless you are customizing the template. Changing the name updates code 
+      references to point to a new location.
+    MinLength: 3
+    MaxLength: 63
+    Type: String      
   QSS3KeyPrefix:
-    Description:
-      'Keep the default prefix unless you are customizing the template or asset location.
-      Changing this prefix updates code references to point to a new Quick Start location.
-      This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/).
-      End with a forward slash. See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html and https://aws-quickstart.github.io/option1.html.'
-    Type: String
+    AllowedPattern: ^([0-9a-zA-Z!-_\.\*'\(\)/]+/)*$
+    ConstraintDescription: >-
+      The S3 key prefix can include numbers, lowercase letters, uppercase letters, 
+      hyphens (-), underscores (_), periods (.), asterisks (*), single quotes ('),
+      open parenthesis ((), close parenthesis ()), and forward slashes (/). End the
+      prefix with a forward slash.
     Default: 'quickstart-aws-utility-meter-headend-system-simulator/'
-    AllowedPattern: '^[0-9a-zA-Z-/]*$'
-    ConstraintDescription:
-      'The Quick Start S3 key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/).
-      The prefix should end with a forward slash (/).'
+    Type: String    
 Conditions:
   createTimestream: !Equals [ !Ref TimestreamCreation, 'Create New' ]
   UsingDefaultBucket: !Equals [ !Ref QSS3BucketName, 'aws-quickstart' ]
@@ -839,37 +837,37 @@ Resources:
         - !GetAtt CreateSecretInvoke.PublicKey
 Outputs:
   TimestreamDatabaseARN:
-    Description: 'ARN of Timestream database'
+    Description: 'ARN of Timestream database.'
     Value: !If [ createTimestream, !GetAtt TimestreamDatabase.Arn, !Join [ '/', [ !Join [ ':', [ 'arn' , 'aws', 'timestream', !Ref AWS::Region, !Ref AWS::AccountId, 'database' ] ] , !Ref TimestreamDatabaseName ] ] ]
     Export:
       Name: !Join [ ':', [ !Ref AWS::StackName, 'TimestreamDatabaseARN' ] ]
   TimestreamTableARN:
-    Description: 'ARN of Timestream table'
+    Description: 'ARN of Timestream table.'
     Value: !If [ createTimestream, !GetAtt TimestreamTable.Arn, !Join [ '/', [ !Join [ ':', [ 'arn' , 'aws', 'timestream', !Ref AWS::Region, !Ref AWS::AccountId, 'database' ] ] , !Ref TimestreamDatabaseName, 'table', !Ref TimestreamTableName ] ] ]
     Export:
       Name: !Join [ ':', [ !Ref AWS::StackName, 'TimestreamTableARN' ] ]
   TimestreamDatabaseName:
-    Description: 'Name of Timestream database'
+    Description: 'Name of Timestream database.'
     Value: !If [ createTimestream, !Ref TimestreamDatabase, !Ref TimestreamDatabaseName ]
     Export:
       Name: !Join [ ':', [ !Ref AWS::StackName, 'TimestreamDatabaseName' ] ]
   TimestreamTableName:
-    Description: 'Name of Timestream table'
+    Description: 'Name of Timestream table.'
     Value: !If [ createTimestream, !GetAtt TimestreamTable.Name, !Ref TimestreamTableName ]
     Export:
       Name: !Join [ ':', [ !Ref AWS::StackName, 'TimestreamTableName' ] ]
   apiGatewayInvokeURL:
-    Description: 'API Gateway URL'
+    Description: 'API Gateway URL.'
     Value: !Sub https://${apiGateway}.execute-api.${AWS::Region}.amazonaws.com/prod
     Export:
       Name: !Join [ ':', [ !Ref AWS::StackName, 'apiGatewayInvokeURL' ] ]
   SftpServerAddress:
-    Description: 'SFTP Server Address'
+    Description: 'SFTP server address.'
     Value: !Sub ${SFTPServer.ServerId}.server.transfer.${AWS::Region}.amazonaws.com
     Export:
       Name: !Join [ ':', [ !Ref AWS::StackName, 'SftpServerAddress' ] ]
   SftpUserName:
-    Description: 'SFTP User Name'
+    Description: 'SFTP user name.'
     Value: !GetAtt SFTPUser.UserName
     Export:
       Name: !Join [ ':', [ !Ref AWS::StackName, 'SftpUser' ] ]
