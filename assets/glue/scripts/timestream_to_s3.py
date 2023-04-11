@@ -47,7 +47,7 @@ try:
     f"""( 
     	select
     		time, arrival_time, device_id, measure_name, load, crrnt, pf, kva, kw, vltg
-    	from {{timestream_database}}.{{timestream_table}}
+    	from "{{timestream_database}}"."{{timestream_table}}"
     	where time >= '{{start_date}}'
     	and time <= '{{end_date}}'
     	)""") \
