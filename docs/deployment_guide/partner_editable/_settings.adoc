@@ -7,8 +7,8 @@
 :doc-year: 2023
 // :partner-contributors:
 // :other-contributors:
-//TODO Tony, Can you please give me the name of the team that Michael, Sascha, and John are on?:aws-contributors: Michael Litz, Sascha Janssen, John Mousa
-:aws-ia-contributors: Tony Bulding, AWS Integration & Automation team
+:aws-contributors: Michael Litz, Tony Bulding, Sascha Janssen, and John Mousa, Amazon Web Services
+// :aws-ia-contributors: Tony Bulding, AWS Integration & Automation team
 :deployment_time: 5 minutes
 :default_deployment_region: us-east-1
 // :private_repo:

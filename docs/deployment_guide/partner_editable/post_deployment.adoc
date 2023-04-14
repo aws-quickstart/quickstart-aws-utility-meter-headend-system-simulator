@@ -9,7 +9,7 @@ After you launch {partner-product-short-name}, refer to the following output val
 [#outputs1]
 .Outputs for {partner-product-short-name} on AWS
 image::../docs/deployment_guide/images/outputs.png[Outputs]
-//TODO Tony, I reformatted the list below because it wasn't displaying at all. Is this the format you intended?
+
 * *apiGatewayInvokeURL*: \https://<id>.execute-api.<region>.amazonaws.com/prod
 * *SecretARN*: arn:aws:secretsmanager:<region>:<account>:secret:<stackname>/sftp/private_key-<id>
 * *SecretName*: <stackname>/sftp/private_key
@@ -41,7 +41,6 @@ When interacting with the {partner-product-short-name} REST API, use the output 
 Example: `{apiGatewayInvokeURL}`
 
 ==== Paginated smart meter readings
-//TODO Tony, I reformatted the list below because it wasn't displaying at all. Is this the format you intended?
 * *readings_endpoint*: readings
 * *start_date*: 2023-02-27 16:00:00.000000
 * *end_date*: 2023-02-27 16:40:00.000000
@@ -159,7 +158,6 @@ See an example response below. Continue repeating the pattern of passing in the 
 ----
 
 ==== Bulk meter readings files
-//TODO Tony, I reformatted the item below because it wasn't displaying at all. Is this the format you intended?
 * *readingsfile_endpoint*: readings/file
 
 To request a bulk readings file, make a POST request by appending `/readings/file` to the `apiGatewayInvokeURL` URL, as shown below. +
