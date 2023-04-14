@@ -5,21 +5,22 @@ AWS Cloud.
 
 [#architecture1]
 .Partner Solution architecture for {partner-product-short-name} on AWS
-image::../docs/deployment_guide/images/architecture_diagram.png[Architecture]
+image::../docs/deployment_guide/images/headend-system-simulator-architecture-diagram.png[Architecture]
 
 As shown in <<architecture1>>, this Partner Solution sets up the following:
 
-* An Amazon API Gateway "readings" resource with GET method that returns paginated smart meter readings.
+* An Amazon API Gateway Readings resource with GET method that returns Paginated smart meter readings.
 * An AWS Lambda function to query Amazon Timestream and return paginated results.
-* An Amazon API Gateway "readings/file" resource containing:
-** A POST method that inserts asynchronous file request messages into an Amazon SQS queue and updates the status in an Amazon DynamoDB table.
-** A GET method that returns the details of file requests.
-* An Amazon SQS queue that triggers a "Worker" AWS Lambda function.
-* A "Worker" AWS Lambda function which queries Amazon Timestream for number of records requested in order pass right-sized parameters to an AWS Glue job.
+* An API Gateway Readings/File resource containing:
+** A Lambda function with POST method that inserts asynchronous file request messages into an Amazon Simple Notification Service (Amazon SQS) queue and updates the status in an Amazon DynamoDB table.
+** A Lambda function with GET method that returns the details of file requests.
+* An Amazon SQS queue that triggers a worker Lambda function.
+* A worker Lambda function that queries Timestream for number of records requested to pass right-sized parameters to an AWS Glue job.
 * An AWS Glue job that:
-** Uses a JDBC driver to query Amazon Timestream in parallel with worker nodes.
-** Coalesces the query results into a single file that is uploaded to Amazon S3.
-** Marks the file request status as "complete" and s3 location in the Amazon DynamoDB table.
-* An Amazon Timestream database and table that contains utility smart meter readings.
-* An Amazon S3 bucket that contains the readings files that are exported by the AWS Glue job.
-* An SFTP file transfer service using AWS Transfer Family and private certificate stored in AWS Secrets Manager used for authentication.
+** Uses a Java Database Connectivity (JDBC) driver to connect to Timestream.
+** Combines query results into a single file and uploads to the meter readings Amazon Simple Storage Service (Amazon S3) bucket.
+** In the DynamoDB table, marks the file request status as complete and records the location of the results file in the meter readings S3 bucket.
+* A Timestream database and table that contains utility smart meter readings.
+* An S3 bucket that contains the readings files that are exported by the AWS Glue job.
+* An AWS SFTP file transfer service using AWS Transfer Family and a private certificate stored in AWS Secrets Manager used for authentication.
+* The https://aws-quickstart.github.io/quickstart-aws-utility-meter-data-generator/[Device Data Generator Partner Solution^] (optional) to generate and insert simulated smart meter readings into Amazon Timestream at a regular interval.
