@@ -3,7 +3,7 @@
 :partner-product-name: Headend System Simulator
 :partner-product-short-name: Headend System Simulator
 :partner-company-name: Amazon Web Services, Inc.
-:doc-month: April
+:doc-month: May
 :doc-year: 2023
 // :partner-contributors:
 // :other-contributors:
