@@ -17,9 +17,9 @@ As shown in <<architecture1>>, this Partner Solution sets up the following:
 ** Query Timestream for number of records requested to pass right-sized parameters to an AWS Glue job.
 * An Amazon SQS queue that invokes a worker Lambda function.
 * An AWS Glue job that does the following:
-** Use a Java Database Connectivity (JDBC) driver to connect to Timestream.
-** Combine query results into a single file and uploads to the meter readings Amazon Simple Storage Service (Amazon S3) bucket.
-** In the DynamoDB table, mark the file request status as complete and record the location of the results file in the meter readings S3 bucket.
+** Uses a Java Database Connectivity (JDBC) driver to connect to Timestream.
+** Combines query results into a single file and uploads to the meter readings Amazon Simple Storage Service (Amazon S3) bucket.
+** In the DynamoDB table, marks the file request status as complete and record the location of the results file in the meter readings S3 bucket.
 * A Timestream database and table that contains utility smart-meter readings.
 * An S3 bucket that contains the readings files exported by AWS Glue.
 * AWS Transfer for SFTP (AWS SFTP) to transfer meter readings files.
